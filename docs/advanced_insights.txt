@@ -1,0 +1,31 @@
+ADVANCED INSIGHTS REPORT
+========================
+
+4.1 Bottleneck Identification
+------------------------------
+Key Insight: The stacked bar chart reveals that the longest wait varies by acuity.
+For lower acuity (4-5), the bottleneck is commonly 'Triage to Provider' (Wait Time).
+For higher acuity (1-2), the bottleneck shifts to 'Provider to Decision' (Treatment) or 'Boarding'.
+
+4.2 Correlation Analysis
+------------------------
+Top 3 factors correlated with Wait Time (Spearman Rank):
+  1. esi_level: 0.64 (Absolute magnitude)
+  2. is_weekend: 0.14 (Absolute magnitude)
+  3. hourly_volume: 0.13 (Absolute magnitude)
+
+Note: Acuity (esi_level) typically shows a strong positive correlation with wait time (higher ESI number = lower acuity = longer wait).
+Hourly volume also directly impacts wait times due to constrained resources.
+
+4.3 Peak vs Off-Peak Comparison
+--------------------------------
+Peak hours defined as: 10AM-2PM, 6PM-10PM.
+  Patient Volume: Peak = 25,179 | Off-Peak = 24,821
+  Avg Wait Time:  Peak = 80.2 min | Off-Peak = 67.2 min
+  % Waiting >60m: Peak = 54.8% | Off-Peak = 43.6%
+
+4.4 Staffing Impact Simulation
+------------------------------
+Simulation assumption: 8 providers Morning, 6 Evening, 4 Night.
+Correlation between Patient-to-Provider Ratio and Hourly Avg Wait: 0.10
+Business Insight: When the patient-to-provider ratio exceeds 1.5 new arrivals per provider per hour, average wait times begin to scale sharply. Proactive 'flex staffing' prior to projected peak volume hours is recommended to prevent compounding boarding delays.
