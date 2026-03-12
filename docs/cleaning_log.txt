@@ -1,0 +1,175 @@
+===========================================================================
+  DATA CLEANING LOG — ER Patient Visits
+  Generated: 2026-03-12 10:47:34
+  Script: scripts/clean_data.py
+===========================================================================
+
+===========================================================================
+  SECTION 1: PRE-CLEANING MISSING VALUE ASSESSMENT
+===========================================================================
+
+  Dataset shape: 50,000 rows × 36 columns
+  Total cells: 1,800,000
+  Total missing values: 46,408 (2.58%)
+
+  Column                          Missing     Pct  Type        
+  ----------------------------------------------------------------------
+  age                                 479    1.0%  float64     
+  race_ethnicity                    2,002    4.0%  object      
+  insurance_type                      953    1.9%  object      
+  chief_complaint                     921    1.8%  object      
+  esi_level                         2,021    4.0%  float64     
+  triage_datetime                   1,206    2.4%  object      
+  seen_by_provider_datetime         3,774    7.5%  object      
+  departure_datetime                  698    1.4%  object      
+  total_los_minutes                   698    1.4%  float64     
+  heart_rate                        4,356    8.7%  float64     
+  systolic_bp                       4,346    8.7%  float64     
+  diastolic_bp                      4,355    8.7%  float64     
+  respiratory_rate                  4,375    8.8%  float64     
+  spo2                              4,389    8.8%  float64     
+  temperature_f                     4,397    8.8%  float64     
+  pain_scale                        7,438   14.9%  float64     
+  
+
+===========================================================================
+  SECTION 2: ESI LEVEL (TRIAGE ACUITY)
+===========================================================================
+
+  Column: esi_level
+  Missing: 2,021 (4.0%)
+  Why missing: Systematic — LWBS patients often not formally triaged; some documentation gaps during high-volume periods.
+  Decision: FLAG (not fill). Created 'esi_missing_flag' column. Missing ESI preserved as NaN for transparency.
+  Detail: Disposition of missing-ESI visits: {'Discharged': 971, 'LWBS': 566, 'Admitted': 338, 'AMA': 85, 'Transferred': 58, 'Deceased': 3}
+
+  NOTE: Also created 'esi_level_imputed' using mode within disposition group — use only when ESI is required for analysis.
+
+===========================================================================
+  SECTION 3: VITAL SIGNS
+===========================================================================
+
+  Column: heart_rate
+  Missing: 4,356 (8.7%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'heart_rate_imputed_flag'. Medians: {ESI 1.0: 106, ESI 2.0: 104, ESI 3.0: 82, ESI 4.0: 81, ESI 5.0: 81}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+  Column: systolic_bp
+  Missing: 4,346 (8.7%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'systolic_bp_imputed_flag'. Medians: {ESI 1.0: 126, ESI 2.0: 129, ESI 3.0: 126, ESI 4.0: 127, ESI 5.0: 126}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+  Column: diastolic_bp
+  Missing: 4,355 (8.7%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'diastolic_bp_imputed_flag'. Medians: {ESI 1.0: 78, ESI 2.0: 80, ESI 3.0: 78, ESI 4.0: 78, ESI 5.0: 78}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+  Column: respiratory_rate
+  Missing: 4,375 (8.8%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'respiratory_rate_imputed_flag'. Medians: {ESI 1.0: 24, ESI 2.0: 23, ESI 3.0: 17, ESI 4.0: 17, ESI 5.0: 17}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+  Column: spo2
+  Missing: 4,389 (8.8%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'spo2_imputed_flag'. Medians: {ESI 1.0: 89, ESI 2.0: 94, ESI 3.0: 96, ESI 4.0: 97, ESI 5.0: 96}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+  Column: temperature_f
+  Missing: 4,397 (8.8%)
+  Why missing: Correlated — equipment issues, patient refusal, pediatric patients (often missing together).
+  Decision: FILL with median WITHIN ESI level. Created 'temperature_f_imputed_flag'. Medians: {ESI 1.0: 99, ESI 2.0: 99, ESI 3.0: 99, ESI 4.0: 99, ESI 5.0: 99}
+  Detail: 0 remaining nulls (missing ESI too) filled with global median.
+
+
+===========================================================================
+  SECTION 4: PAIN SCALE
+===========================================================================
+
+  Column: pain_scale
+  Missing: 7,438 (14.9%)
+  Why missing: Systematic — pediatric (<3 yrs), altered mental status, and unconscious patients cannot self-report pain.
+  Decision: FLAG + FILL with median within ESI level. Created 'pain_scale_missing_flag'.
+  Detail: Mean age of missing: 29 yrs. Top complaints: {'Altered Mental Status': 744, 'Abdominal Pain': 685, 'Chest Pain': 507, 'Fracture / Injury': 477, 'Shortness of Breath': 475}
+
+
+===========================================================================
+  SECTION 5: TIMESTAMPS
+===========================================================================
+
+  Column: seen_by_provider_datetime
+  Missing: 3,774 (7.5%)
+  Why missing: Systematic — LWBS patients never seen by a provider; some data entry gaps.
+  Decision: FLAG. Keep NaN. Records excluded from door-to-provider time calculations but included in volume analysis.
+
+  Column: departure_datetime
+  Missing: 698 (1.4%)
+  Why missing: Random — data entry errors, system downtime, patients who left without notification.
+  Decision: FLAG. Keep NaN. Total LOS also set to NaN for these. Excluded from LOS analysis.
+
+  Column: triage_datetime
+  Missing: 1,206 (2.4%)
+  Why missing: Systematic — correlated with missing ESI; patient not formally triaged.
+  Decision: FLAG. Keep NaN.
+
+  NOTE: Created 'eligible_for_time_analysis' flag: 49,302 (98.6%) records eligible for wait-time / LOS calculations.
+
+===========================================================================
+  SECTION 6: DEMOGRAPHICS
+===========================================================================
+
+  Column: race_ethnicity
+  Missing: 2,002 (4.0%)
+  Why missing: Mixed — patient declined, emergency situations, language barriers.
+  Decision: FILL with 'Unknown/Declined'. This preserves the category for analysis without assuming a race.
+
+  Column: insurance_type
+  Missing: 953 (1.9%)
+  Why missing: Random — registration incomplete at time of data pull.
+  Decision: FILL with 'Unknown'. Cannot safely infer payer type.
+
+  Column: age
+  Missing: 479 (1.0%)
+  Why missing: Rare — unidentified patients (John/Jane Doe), emergency situations.
+  Decision: FLAG + FILL with median age (45). Created 'age_imputed_flag'.
+
+
+===========================================================================
+  SECTION 7: CHIEF COMPLAINT
+===========================================================================
+
+  Column: chief_complaint
+  Missing: 921 (1.8%)
+  Why missing: Mixed — unconscious patients, language barriers, data entry errors.
+  Decision: FILL with 'Unknown/Not Documented'. Preserves record for other analyses.
+
+
+===========================================================================
+  SECTION 8: POST-CLEANING VALIDATION
+===========================================================================
+
+  Column                              Remaining NaN  Status
+  -----------------------------------------------------------------
+  esi_level                                   2,021  ✓ Expected (documented)
+  triage_datetime                             1,206  ✓ Expected (documented)
+  seen_by_provider_datetime                   3,774  ✓ Expected (documented)
+  departure_datetime                            698  ✓ Expected (documented)
+  total_los_minutes                             698  ✓ Expected (documented)
+  NOTE: All remaining nulls are in expected columns with documented reasons.
+  
+  --- Data Integrity Checks ---
+  Negative wait times: 0 ✓
+  heart_rate out of range [20-250]: 0 ✓
+  systolic_bp out of range [50-300]: 0 ✓
+  respiratory_rate out of range [5-60]: 0 ✓
+  spo2 out of range [50-100]: 0 ✓
+  temperature_f out of range [90-110]: 0 ✓
+  
+  --- Final Dataset Summary ---
+  Total records: 50,000
+  Total columns: 50 (original 36 + 14 flag columns)
+  Eligible for time analysis: 49,302 (98.6%)
+  Records with imputed vitals: 9,223
