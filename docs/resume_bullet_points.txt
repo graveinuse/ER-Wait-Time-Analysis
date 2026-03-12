@@ -1,0 +1,20 @@
+# Hospital ER Wait Time & Patient Flow Project
+
+## 6.3 Resume Bullet Points
+
+**Option 1: Focused on Data Engineering & Python Pipeline**
+- Engineered an end-to-end Python (Pandas/NumPy) pipeline to clean, validate, and extract 9 clinical timing features from 50,000+ emergency department records across 3 unified datasets.
+- Developed an automated data validation script evaluating 7 clinical logic checks (e.g., triage progression, median vital sign imputation), ensuring 100% data integrity for downstream analysis.
+
+**Option 2: Focused on EDA, Insights & Business Impact**
+- Analyzed 50,000 ER visit records to identify patient flow bottlenecks, discovering that low-acuity triage patients wait 17.8x longer than emergent patients, contributing to 23% increased boarding rates.
+- Generated comprehensive exploratory and advanced operational visualizations using Matplotlib/Seaborn, pinpointing optimal flex-staffing windows between 10 AM-2 PM and 6 PM-10 PM.
+
+**Option 3: Focused on BI & Tableau Dashboards**
+- Built a 3-page interactive Tableau operational dashboard featuring hourly heatmaps, acuity breakdowns, and KPI tracking, empowering ER operations managers to actively optimize staffing aligned with patient cadence.
+- Delivered an executive summary highlighting 4 data-driven recommendations, including an acuity 4-5 fast-track lane projected to reduce non-urgent waiting room delays and optimize bed utilization.
+
+**Option 4: Comprehensive (Using 3 bullets)**
+- Engineered a robust Python (Pandas) data pipeline processing 50,000+ patient records, handling complex clinical missingness and extracting 9 timing/acuity features from raw hospital timestamps.
+- Conducted advanced bottleneck analysis using Seaborn, revealing that wait times spike non-linearly when patient-to-provider ratios exceed 1.5/hr, recommending targeted peak-hour flex staffing.
+- Designed a 3-page interactive Tableau dashboard mapping patient volume heatmaps and length-of-stay distributions, equipping management with strategic visibility into ER operational flow.
