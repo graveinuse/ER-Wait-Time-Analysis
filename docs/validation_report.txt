@@ -1,0 +1,132 @@
+======================================================================
+  DATA VALIDATION REPORT
+  Dataset: er_visits_featured.csv
+  Records: 50,000 | Columns: 59
+======================================================================
+
+======================================================================
+  CHECK 1: Negative Wait Times
+======================================================================
+
+  ✓ PASS: No negative wait times found (50,000 valid records checked)
+
+======================================================================
+  CHECK 2: Extreme Wait Times (>24 hours = 1440 minutes)
+======================================================================
+
+  ✓ PASS: No wait times exceed 24 hours
+  ✓ PASS: No total LOS exceeds 48 hours
+
+======================================================================
+  CHECK 3: Acuity Level Sample Sizes
+======================================================================
+
+  ESI Level       Count     Pct  Status
+  ---------------------------------------------
+  ESI 1             723    1.4%  ✓ Adequate
+  ESI 2           6,877   13.8%  ✓ Adequate
+  ESI 3          20,717   41.4%  ✓ Adequate
+  ESI 4          14,850   29.7%  ✓ Adequate
+  ESI 5           4,812    9.6%  ✓ Adequate
+  Missing         2,021    4.0%  Flagged (not triaged)
+  ✓ PASS: All ESI levels have adequate sample sizes (≥100)
+
+======================================================================
+  CHECK 4: Date Distribution & Gaps
+======================================================================
+
+  Date range: 2022-01-01 → 2024-12-31
+  Span: 1,095 days
+  ✓ PASS: No date gaps — all 1,096 days have at least 1 visit
+
+  Monthly volume distribution:
+    2022-01: 1,499  ██████████████
+    2022-02: 1,376  █████████████
+    2022-03: 1,409  ██████████████
+    2022-04: 1,387  █████████████
+    2022-05: 1,391  █████████████
+    2022-06: 1,330  █████████████
+    2022-07: 1,280  ████████████
+    2022-08: 1,290  ████████████
+    2022-09: 1,308  █████████████
+    2022-10: 1,417  ██████████████
+    2022-11: 1,514  ███████████████
+    2022-12: 1,563  ███████████████
+    2023-01: 1,484  ██████████████
+    2023-02: 1,374  █████████████
+    2023-03: 1,403  ██████████████
+    2023-04: 1,306  █████████████
+    2023-05: 1,361  █████████████
+    2023-06: 1,223  ████████████
+    2023-07: 1,262  ████████████
+    2023-08: 1,342  █████████████
+    2023-09: 1,369  █████████████
+    2023-10: 1,295  ████████████
+    2023-11: 1,513  ███████████████
+    2023-12: 1,527  ███████████████
+    2024-01: 1,596  ███████████████
+    2024-02: 1,481  ██████████████
+    2024-03: 1,367  █████████████
+    2024-04: 1,394  █████████████
+    2024-05: 1,387  █████████████
+    2024-06: 1,227  ████████████
+    2024-07: 1,254  ████████████
+    2024-08: 1,319  █████████████
+    2024-09: 1,420  ██████████████
+    2024-10: 1,343  █████████████
+    2024-11: 1,442  ██████████████
+    2024-12: 1,547  ███████████████
+  ✓ PASS: Monthly volumes are reasonably distributed (avg: 1389/month)
+
+======================================================================
+  CHECK 5: Acuity vs Wait Time (Higher acuity → shorter wait)
+======================================================================
+
+             Count  Mean Wait  Median Wait
+esi_level                               
+1.0          723        6.3          6.0
+2.0         6877       26.8         23.0
+3.0        20717       60.3         52.0
+4.0        14850      101.7         88.0
+5.0         4812      122.7        107.0
+
+  ✓ PASS: Wait times increase monotonically with ESI level (1→5) ✓
+  ESI 1 (Resuscitation): 6 min median
+  ESI 5 (Non-Urgent):    107 min median
+  Ratio (ESI 5 / ESI 1): 17.8x
+
+======================================================================
+  CHECK 6: Disposition Logic Checks
+======================================================================
+
+  ✓ PASS: All LWBS patients have zero treatment time (3,322 records)
+  ✓ PASS: All deceased patients were ESI 1–3 (75 total)
+  Admitted patients with boarding time: 11,366/11,366 (100.0%)
+  ✓ PASS: Disposition logic checks completed
+
+======================================================================
+  CHECK 7: Vital Sign Clinical Plausibility
+======================================================================
+
+  ✓ PASS: heart_rate: all 50,000 values in range [30–220] bpm
+  ✓ PASS: systolic_bp: all 50,000 values in range [60–260] mmHg
+  ✓ PASS: diastolic_bp: all 50,000 values in range [30–150] mmHg
+  ✓ PASS: respiratory_rate: all 50,000 values in range [6–50] breaths/min
+  ✓ PASS: spo2: all 50,000 values in range [60–100] %
+  ✓ PASS: temperature_f: all 50,000 values in range [93–108] °F
+  ✓ PASS: pain_scale: all 50,000 values in range [0–10] /10
+
+======================================================================
+  VALIDATION SUMMARY
+======================================================================
+
+  Total checks performed:  7
+  Issues found:            0
+  Fixes applied:           0
+  Final record count:      50,000
+  Final column count:      59
+  Eligible for time analysis: 49,302 (98.6%)
+
+  🎉 ALL CHECKS PASSED — Data is analysis-ready!
+
+  Validated dataset saved → C:\Users\malli\Desktop\PROJECTS\HOSPITAL-ER\ER-Wait-Time-Analysis\data\processed\er_visits_validated.csv
